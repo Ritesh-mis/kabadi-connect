@@ -1,0 +1,10 @@
+{
+  "description": "Connects informal scrap collectors with authorized recyclers by providing fair prices, traceable transactions, and safety guidance in low-connectivity areas.",
+  "robots": {
+    "index": false
+  },
+  "accessibility": {
+    "addBypassLinks": false,
+    "ignoreReducedMotion": false
+  }
+}

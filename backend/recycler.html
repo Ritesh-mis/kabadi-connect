@@ -1,0 +1,11 @@
+<!doctype html><meta name=viewport content="width=device-width,initial-scale=1"><title>Recycler Portal</title>
+<style>body{font:15px system-ui;max-width:720px;margin:20px auto;padding:0 12px}input,button,select{padding:8px;margin:3px}.c{border:1px solid #ccc;border-radius:8px;padding:10px;margin:8px 0}</style>
+<h2>Recycler Portal</h2>
+<div><select id=id><option value=r1>GreenCycle Pune</option><option value=r2>EcoMetals</option><option value=r3>Sahyadri</option></select><input id=pin placeholder=PIN value=1111 size=6><button onclick=load()>Load handovers</button></div>
+<div id=list></div><h3>Verify reference</h3><input id=vr placeholder=HO-XXXXXX><button onclick=ver()>Verify</button><pre id=vo></pre>
+<script>
+const H=()=>({'Content-Type':'application/json','x-recycler-id':id.value,'x-recycler-pin':pin.value});
+async function load(){const r=await fetch('/api/recycler/pending',{headers:H()});const d=await r.json();list.innerHTML=r.ok?d.map(x=>`<div class=c><b>${x.ref}</b> ${x.category} ${x.weight_kg}kg, quoted ₹${x.quoted_price}<br>Final weight <input id=w${x.ref} value=${x.weight_kg} size=5><button onclick="ok('${x.ref}')">Confirm & paid (cash)</button></div>`).join('')||'No pending handovers':d.error}
+async function ok(ref){const r=await fetch('/api/recycler/confirm',{method:'POST',headers:H(),body:JSON.stringify({ref,final_weight:document.getElementById('w'+ref).value})});alert(JSON.stringify(await r.json()));load()}
+async function ver(){vo.textContent=JSON.stringify(await (await fetch('/api/verify/'+vr.value)).json(),null,2)}
+</script>
